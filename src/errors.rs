@@ -20,6 +20,12 @@ pub enum GovernorError {
     },
 }
 
+impl From<GovernorError> for Response<String> {
+    fn from(error: GovernorError) -> Self {
+        error.into_response()
+    }
+}
+
 #[cfg(feature = "axum")]
 impl From<GovernorError> for Response<axum::body::Body> {
     fn from(error: GovernorError) -> Self {
