@@ -1,4 +1,6 @@
+use bytes::Bytes;
 use http::{HeaderMap, Response, StatusCode};
+use http_body_util::{combinators::BoxBody, BodyExt};
 use thiserror::Error;
 
 /// The error type returned by tower-governor.
@@ -23,6 +25,14 @@ pub enum GovernorError {
 impl From<GovernorError> for Response<String> {
     fn from(error: GovernorError) -> Self {
         error.into_response()
+    }
+}
+
+impl From<GovernorError> for Response<BoxBody<Bytes, anyhow::Error>> {
+    fn from(error: GovernorError) -> Self {
+        error
+            .into_response()
+            .map(|body| body.map_err(|_| unreachable!()).boxed())
     }
 }
 
