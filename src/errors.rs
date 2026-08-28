@@ -28,7 +28,7 @@ impl From<GovernorError> for Response<String> {
     }
 }
 
-impl From<GovernorError> for Response<BoxBody<Bytes, anyhow::Error>> {
+impl From<GovernorError> for Response<BoxBody<Bytes, eyre::Error>> {
     fn from(error: GovernorError) -> Self {
         error
             .into_response()
